@@ -14,6 +14,7 @@ import { UpdateRoleDto } from './dto/update-role-user.dto';
 import { CreateUserUseCase } from './use-cases/create-user.use-case';
 import { FindAllUserUseCase } from './use-cases/find-all-user.use-case';
 import { FindByIdUserUseCase } from './use-cases/find-by-id-user.use-case';
+import { GetProductsUserUseCase } from './use-cases/get-products-user.use-case';
 import { RemoveUserUseCase } from './use-cases/remove-user.use-case';
 import { SetDeptoUserUseCase } from './use-cases/set-depto-user.use-case';
 import { SetRoleUserUseCase } from './use-cases/set-role-user.use.case';
@@ -38,6 +39,9 @@ export class UsersController {
   @Inject(SetRoleUserUseCase)
   private readonly setRoleUserUseCase: SetRoleUserUseCase;
 
+  @Inject(GetProductsUserUseCase)
+  private readonly getProductsUserUseCase: GetProductsUserUseCase;
+
   @Get()
   findAll() {
     return this.findAllUserUseCase.execute();
@@ -46,6 +50,11 @@ export class UsersController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.findByIdUserUseCase.execute(id);
+  }
+
+  @Get('/products/:id')
+  async findProductByUser(@Param('id') id: string) {
+    return this.getProductsUserUseCase.execute(id);
   }
 
   @Patch(':id/depto')
