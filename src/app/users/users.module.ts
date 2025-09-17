@@ -11,9 +11,23 @@ import { RemoveUserUseCase } from './use-cases/remove-user.use-case';
 import { SetDeptoUserUseCase } from './use-cases/set-depto-user.use-case';
 import { SetRoleUserUseCase } from './use-cases/set-role-user.use.case';
 import { UsersController } from './users.controller';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
-  imports: [HttpModule, TypeOrmModule.forFeature([User])],
+  imports: [
+    ClientsModule.register([
+      {
+        name: 'PROJECTS_SERVICE',
+        transport: Transport.RMQ,
+        options: {
+          urls: ['amqp://guest:guest@localhost:5672'],
+          queue: 'projects_queue',
+        },
+      },
+    ]),
+    HttpModule, 
+    TypeOrmModule.forFeature([User])
+  ],
   controllers: [UsersController],
   providers: [
     CreateUserUseCase,
